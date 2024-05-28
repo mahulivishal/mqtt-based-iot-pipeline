@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package iot;
+
+message DeviceBMSData {
+  string  deviceId = 1;
+  double soc = 2;
+  int64 timestamp = 4;
+}
