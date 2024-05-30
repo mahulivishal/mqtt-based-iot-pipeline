@@ -4,4 +4,10 @@ This PoC aims at detailing out an example to build IoT pipelines using MQTT, Fli
 
 # Protobuf Compilation
 protoc -I=$SRC_DIR --python_out=$DST_DIR $SRC_DIR/device-data.proto
-protoc -I=mqtt-pub-sub --python_out=mqtt-pub-sub/proto_py --pyi_out=mqtt-pub-sub/proto_py mqtt-pub-sub/device_data.proto
+protoc -I. --python_out=iot/proto/proto_py device_data.proto
+
+# Creating a Virtual Env in Python
+brew install virtualenv
+python3 -m venv ~/pyvenv
+source ~/pyvenv/bin/activate
+pip3 install -r requirements.txt

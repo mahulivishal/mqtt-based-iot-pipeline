@@ -13,13 +13,13 @@ from google.protobuf.internal import builder as _builder
 _sym_db = _symbol_database.Default()
 
 DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
-    b'\n\x11\x64\x65vice_data.proto\x12\x03iot\"A\n\rDeviceBMSData\x12\x10\n\x08\x64\x65viceId\x18\x01 \x01(\t\x12\x0b\n\x03soc\x18\x02 \x01(\x01\x12\x11\n\ttimestamp\x18\x04 \x01(\x03\x62\x06proto3')
+    b'\n\x11\x64\x65vice_data.proto\x12\tiot.proto\"A\n\rDeviceBMSData\x12\x10\n\x08\x64\x65viceId\x18\x01 \x01(\t\x12\x0b\n\x03soc\x18\x02 \x01(\x01\x12\x11\n\ttimestamp\x18\x04 \x01(\x03\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'device_data_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
     DESCRIPTOR._loaded_options = None
-    _globals['_DEVICEBMSDATA']._serialized_start = 26
-    _globals['_DEVICEBMSDATA']._serialized_end = 91
+    _globals['_DEVICEBMSDATA']._serialized_start = 32
+    _globals['_DEVICEBMSDATA']._serialized_end = 97
 # @@protoc_insertion_point(module_scope)

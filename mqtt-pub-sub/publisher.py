@@ -1,8 +1,9 @@
 import random
 import time
 
+from paho import mqtt
 from paho.mqtt import client as mqtt_client
-from proto_py import device_data_pb2
+from iot.proto import device_data_pb2
 
 broker = 'localhost'
 port = 18083
@@ -19,10 +20,10 @@ no_of_records = 100
 def connect_mqtt():
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
-            print("Connected to MQTT Broker!")
+            print("PUBLISHER | Connected to MQTT Broker!")
         else:
-            print("Failed to connect, return code %d\n", rc)
-
+            print("PUBLISHER | Failed to connect, return code %d\n", rc)
+    print(f'PUBLISHER | Connecting to the MQTT Broker - broker: {broker}, port: {port}, client_id: {client_id}')
     client = mqtt_client.Client(client_id)
     # client.username_pw_set(username, password)
     client.on_connect = on_connect
@@ -32,17 +33,17 @@ def connect_mqtt():
 
 def publish(client):
     msg_count = 1
+    device_topic = topic + device
     while True:
-        time.sleep(1)
+        time.sleep(2)
         device_id, protobuf = generate_device_data_proto()
-        print(protobuf)
         msg = protobuf.SerializeToString()
-        result = client.publish(topic + device_id, msg)
+        result = client.publish(device_topic, msg, qos=1)
         status = result[0]
         if status == 0:
-            print(f"Send `{msg}` to topic `{topic}`")
+            print(f"PUBLISHER | Sent `{msg}` to topic `{device_topic}`")
         else:
-            print(f"Failed to send message to topic {topic}")
+            print(f"PUBLISHER | Failed to send message to topic {device_topic}")
         msg_count += 1
         if msg_count > no_of_records:
             break

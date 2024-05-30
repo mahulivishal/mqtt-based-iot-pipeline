@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package iot;
+package iot.proto;
 
 message DeviceBMSData {
   string  deviceId = 1;
