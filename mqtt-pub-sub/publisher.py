@@ -1,21 +1,19 @@
 import random
 import time
 
-from paho import mqtt
 from paho.mqtt import client as mqtt_client
 from iot.proto import device_data_pb2
 
-broker = 'localhost'
-port = 18083
+broker = '127.0.0.1'
+port = 1883
 topic = "vishal/poc/mqtt/bms/"
 device = client_id = "d_01"
 soc_min = 5
 soc_max = 80
 no_of_records = 100
+username = 'vishal'
+password = 'vishal@123'
 
-
-# username = 'emqx'
-# password = 'public'
 
 def connect_mqtt():
     def on_connect(client, userdata, flags, rc):
@@ -23,6 +21,7 @@ def connect_mqtt():
             print("PUBLISHER | Connected to MQTT Broker!")
         else:
             print("PUBLISHER | Failed to connect, return code %d\n", rc)
+
     print(f'PUBLISHER | Connecting to the MQTT Broker - broker: {broker}, port: {port}, client_id: {client_id}')
     client = mqtt_client.Client(client_id)
     # client.username_pw_set(username, password)
