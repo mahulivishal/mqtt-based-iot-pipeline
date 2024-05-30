@@ -7,7 +7,8 @@ from iot.proto import device_data_pb2
 broker = '127.0.0.1'
 port = 1883
 topic = "vishal/poc/mqtt/bms/"
-device = client_id = "d_01"
+device = "d_01"
+pub_client = f"pub_{device}"
 soc_min = 5
 soc_max = 80
 no_of_records = 100
@@ -22,8 +23,8 @@ def connect_mqtt():
         else:
             print("PUBLISHER | Failed to connect, return code %d\n", rc)
 
-    print(f'PUBLISHER | Connecting to the MQTT Broker - broker: {broker}, port: {port}, client_id: {client_id}')
-    client = mqtt_client.Client(client_id)
+    print(f'PUBLISHER | Connecting to the MQTT Broker - broker: {broker}, port: {port}, client_id: {pub_client}')
+    client = mqtt_client.Client(pub_client)
     # client.username_pw_set(username, password)
     client.on_connect = on_connect
     client.connect(broker, port)

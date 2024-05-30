@@ -6,7 +6,8 @@ from iot.proto import device_data_pb2
 broker = '127.0.0.1'
 port = 1883
 topic = "vishal/poc/mqtt/bms/"
-device = client_id = "d_01"
+device = "d_01"
+sub_client = f"sub_{device}"
 username = 'vishal'
 password = 'vishal@123'
 
@@ -17,9 +18,9 @@ def connect_mqtt():
             print("SUBSCRIBER | Connected to MQTT Broker!")
         else:
             print("SUBSCRIBER | Failed to connect, return code %d\n", rc)
-    print(f'SUBSCRIBER | Connecting to the MQTT Broker - broker: {broker}, port: {port}, client_id: {client_id}')
-    client = mqtt_client.Client(client_id)
-    client.username_pw_set(username, password)
+    print(f'SUBSCRIBER | Connecting to the MQTT Broker - broker: {broker}, port: {port}, client_id: {sub_client}')
+    client = mqtt_client.Client(sub_client)
+    #client.username_pw_set(username, password)
     client.on_connect = on_connect
     client.reconnect_delay_set(1, 10)
     client.connect(broker, port)
@@ -44,7 +45,7 @@ def subscribe(client):
             print("SUBSCRIBER | Error while parsing data!")
             print(e)
 
-    client.subscribe(device_topic)
+    client.subscribe(device_topic, qos=1)
     print(f'SUBSCRIBER | Subscribing to topic - {device_topic}')
     client.on_message = on_message
 
