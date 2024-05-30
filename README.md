@@ -1,5 +1,5 @@
 # mqtt-based-iot-pipeline
-This PoC aims at detailing out an example to build IoT pipelines using MQTT, Flink and Kafka through a sepcific usecase.
+This PoC aims at detailing out an example to build IoT pipelines using MQTT, Flink and Kafka through a specific usecase.
 
 
 # Protobuf Compilation
@@ -11,3 +11,4 @@ brew install virtualenv
 python3 -m venv ~/pyvenv
 source ~/pyvenv/bin/activate
 pip3 install -r requirements.txt
+
