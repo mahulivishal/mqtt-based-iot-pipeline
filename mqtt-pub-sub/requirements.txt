@@ -1,3 +1,6 @@
 google==3.0.0
 protobuf==5.27.0
 paho-mqtt<2.0.0
+setuptools
+kafka-python
+pykafka

@@ -2,7 +2,13 @@ import json
 
 from paho.mqtt import client as mqtt_client
 from iot.proto import device_data_pb2
+from pykafka import KafkaClient
 
+kafka_brokers = "localhost:9092"
+location_source_data_topic = "device.bms.data.source.v1"
+client = KafkaClient(hosts=kafka_brokers)
+topic = client.topics[location_source_data_topic]
+producer = topic.get_sync_producer()
 broker = '127.0.0.1'
 port = 1883
 topic = "vishal/poc/mqtt/bms/"
@@ -18,6 +24,7 @@ def connect_mqtt():
             print("SUBSCRIBER | Connected to MQTT Broker!")
         else:
             print("SUBSCRIBER | Failed to connect, return code %d\n", rc)
+
     print(f'SUBSCRIBER | Connecting to the MQTT Broker - broker: {broker}, port: {port}, client_id: {sub_client}')
     client = mqtt_client.Client(sub_client)
     #client.username_pw_set(username, password)
@@ -36,10 +43,11 @@ def subscribe(client):
             device_data = device_data_pb2.DeviceBMSData()
             device_data.ParseFromString(msg.payload)
             device_data_json = {
-                "id": device_data.deviceId,
+                "deviceId": device_data.deviceId,
                 "soc": device_data.soc,
                 "timestamp": device_data.timestamp
             }
+            push_data_kq(device_data_json)
             print(f"SUBSCRIBER | Received `{json.dumps(device_data_json)}`")
         except Exception as e:
             print("SUBSCRIBER | Error while parsing data!")
@@ -48,6 +56,12 @@ def subscribe(client):
     client.subscribe(device_topic, qos=1)
     print(f'SUBSCRIBER | Subscribing to topic - {device_topic}')
     client.on_message = on_message
+
+
+def push_data_kq(data):
+    message = json.dumps(data)
+    message_bytes = message.encode('utf-8')
+    producer.produce(message_bytes)
 
 
 def run():

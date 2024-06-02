@@ -22,7 +22,7 @@ public class SuddenSOCDropProcessor extends KeyedProcessFunction<String, DeviceB
 
     private Long socDropDiffThreshold = 10L;
 
-    private Long socPacketCount = 2L;
+    private Long socPacketCount = 1L;
 
     @Override
     public void open(OpenContext openContext) throws Exception {
@@ -34,6 +34,7 @@ public class SuddenSOCDropProcessor extends KeyedProcessFunction<String, DeviceB
     public void processElement(DeviceBMSData deviceBMSData, KeyedProcessFunction<String, DeviceBMSData, String>.Context context, Collector<String> collector) throws Exception {
         DeviceBMSState deviceBMSState = deviceBMSStateValueState.value();
         if(null == deviceBMSState){
+            log.info("Initialising BMS state for device: {}", deviceBMSData.getDeviceId());
             deviceBMSState = DeviceBMSState.builder()
                     .deviceId(deviceBMSData.getDeviceId())
                     .soc(deviceBMSData.getSoc())
@@ -45,6 +46,7 @@ public class SuddenSOCDropProcessor extends KeyedProcessFunction<String, DeviceB
         }
         else {
             if(deviceBMSData.getSoc() > deviceBMSState.getSoc()){
+                log.info("Charger Connected - Reseting BMS state for device: {}", deviceBMSData.getDeviceId());
                 deviceBMSState.setSoc(deviceBMSData.getSoc());
                 deviceBMSState.setSocValues(new ArrayList<>());
                 deviceBMSState.setTimestamp(deviceBMSData.getTimestamp());
@@ -59,7 +61,7 @@ public class SuddenSOCDropProcessor extends KeyedProcessFunction<String, DeviceB
                         .average()
                         .orElse(0L);
                 if(deviceBMSState.getSoc() - avg <= socDropDiffThreshold){
-                    String message = "Sudden SOC Drop of about "+ avg +"% detected! Please connect to a charger ASAP!";
+                    String message = "Sudden SOC Drop of about "+ (deviceBMSState.getSoc() - avg) +"% detected! Please connect to a charger ASAP!";
                     log.info("ALERT: {}", message);
                     Alert alert = Alert.builder()
                             .deviceId(deviceBMSState.getDeviceId())

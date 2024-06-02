@@ -11,9 +11,7 @@ public class BMSDataMapper implements MapFunction<String, DeviceBMSData> {
 
     public DeviceBMSData map(String event) throws Exception {
         try {
-            DeviceBMSData deviceBMSData = mapper.readValue(event, DeviceBMSData.class);
-            log.info("deviceBMSData: {}", deviceBMSData);
-            return deviceBMSData;
+            return mapper.readValue(event, DeviceBMSData.class);
         }catch (Exception e){
             log.error("deviceBMSData ERROR: {}", event);
             log.error("Error: ", e);

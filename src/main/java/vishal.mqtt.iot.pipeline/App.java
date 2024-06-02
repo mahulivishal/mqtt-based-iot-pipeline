@@ -37,7 +37,7 @@ public class App {
                         CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
         // Setting state backend with incremental checkpointing enabled
         process(env);
-        env.execute("Vishal Flink Alert Overspeed");
+        env.execute("Vishal MQTT IoT Pipeline");
     }
 
     private static void process(StreamExecutionEnvironment env) throws Exception {
