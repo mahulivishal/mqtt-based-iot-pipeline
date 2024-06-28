@@ -43,7 +43,7 @@ public class App {
     private static void process(StreamExecutionEnvironment env) throws Exception {
         Properties consumerProps = new Properties();
         consumerProps.setProperty("bootstrap.servers", "localhost:9092");
-        consumerProps.setProperty("group.id", "test");
+        consumerProps.setProperty("group.id", "iot-pipeline-poc-v1");
         Properties producerProps = new Properties();
         producerProps.setProperty("bootstrap.servers", "localhost:9092");
         producerProps.setProperty("acks", "1");
@@ -55,8 +55,8 @@ public class App {
                 .filter(new NullFilters<DeviceBMSData>()).setParallelism(1).name("null-filter")
                 .filter(new BMSDataFilter())
                 .keyBy(DeviceBMSData::getDeviceId)
-                .process(new SuddenSOCDropProcessor()).setParallelism(1).name("over-speed-processor");
-        bmsDataStream.addSink(new FlinkKafkaProducer<>("over.speed.alert.avg.sink.v1", new SimpleStringSchema(), producerProps)).setParallelism(1).name("alert-sink");
+                .process(new SuddenSOCDropProcessor()).setParallelism(1).name("soc-drop-processor");
+        bmsDataStream.addSink(new FlinkKafkaProducer<>("soc.drop.alert.sink.v1", new SimpleStringSchema(), producerProps)).setParallelism(1).name("soc-drop-alert-sink");
     }
 
     }

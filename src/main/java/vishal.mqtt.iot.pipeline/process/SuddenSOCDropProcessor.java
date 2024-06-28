@@ -20,9 +20,9 @@ public class SuddenSOCDropProcessor extends KeyedProcessFunction<String, DeviceB
 
     private transient ValueState<DeviceBMSState> deviceBMSStateValueState;
 
-    private Long socDropDiffThreshold = 10L;
+    private Long socDropDiffThreshold = 5L;
 
-    private Long socPacketCount = 1L;
+    private Long socPacketCount = 2L;
 
     @Override
     public void open(OpenContext openContext) throws Exception {
@@ -60,7 +60,7 @@ public class SuddenSOCDropProcessor extends KeyedProcessFunction<String, DeviceB
                         .mapToDouble(d -> d)
                         .average()
                         .orElse(0L);
-                if(deviceBMSState.getSoc() - avg <= socDropDiffThreshold){
+                if(deviceBMSState.getSoc() - avg >= socDropDiffThreshold){
                     String message = "Sudden SOC Drop of about "+ (deviceBMSState.getSoc() - avg) +"% detected! Please connect to a charger ASAP!";
                     log.info("ALERT: {}", message);
                     Alert alert = Alert.builder()
